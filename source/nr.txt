@@ -1,0 +1,69 @@
+=====================
+Newton Raphson Method
+=====================
+
+This is fairly good method, which doesnt requires any search interval. It only needs an initial guess. But lack of interval is compensated by First order derivative of function. the algorithm is fairly simple and gives close the accurate results in most of the cases
+
+::
+
+  do
+		r+1=r-  f(r)/f'(r)
+  while (none of the convergence criterion C1 or C2 is met)
+	
+
+Convergence criterias are:-
+
+* C1. Fixing apriori the total number of iterations N. 
+
+* C2. By testing the condition :math:`| x_{i+1} - x_i |` (where i is the iteration number) less than some tolerance limit, say epsilon, fixed threshold. 
+
+
+C Implementation
+----------------
+
+.. code-block:: c++
+
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <math.h>
+	#define f(x) ((x*x*x)-18)
+	#define fd(x) (3*x*x)
+	#define fdd(x) 6*x
+	int main(){
+	float x0,x1,error,errorold,converge,order;
+	int i=0;
+	printf("Input the approximation : ");
+	scanf("%f",&x0);
+	converge= (f(x0)*fdd(x0))/(fd(x0)*fd(x0));
+	if(converge >1)
+		exit(1);
+	printf("Ite\tX0\t\tX1\t\tError\t\tOrder\n");
+	do{
+		errorold=error;
+		x1=x0-(f(x0)/fd(x0));
+		if(f(x1)==0){
+			break;
+		}
+		error=fabs(x1-x0);
+		printf("%2d\t%4.6f\t%4.6f\t%4.6f\t",++i,x0,x1,error);
+		if(i==1||error==0||errorold==1){
+			printf("-----\n");
+		}
+		else {order=log(error)/log(errorold);
+		printf("%4.6f\n",order);
+		}
+		x0=x1;
+	}while(error>0.00005);
+	printf("Root is %4.6f",x0);
+	return 0;
+	}
+
+Output
+-------
+::
+
+ Ite	X0		X1		Error		Order
+ 1	2.000000	2.833333	0.833333	-----
+ 2	2.833333	2.636294	0.197040	8.909258
+ 3	2.636294	2.620833	0.015461	2.566843
+Root is 2.620833

@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fixed Point Iteration / Repeated Substitution Method &mdash; Numerical Methods in C 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Numerical Methods in C 1 documentation" href="index.html"/>
+        <link rel="next" title="Bisection Method" href="bisection.html"/>
+        <link rel="prev" title="Welcome to Numerical Methods in C’s Tutorials !" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Numerical Methods in C
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Fixed Point Iteration / Repeated Substitution Method</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-in-c">Implementation in C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bisection.html">Bisection Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regula.html">Regula Falsi Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nr.html">Newton Raphson Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secant.html">Secant Method</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Numerical Methods in C</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Fixed Point Iteration / Repeated Substitution Method</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/fixed.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fixed-point-iteration-repeated-substitution-method">
+<h1>Fixed Point Iteration / Repeated Substitution Method<a class="headerlink" href="#fixed-point-iteration-repeated-substitution-method" title="Permalink to this headline">¶</a></h1>
+<p>This is most easiest of all method. The logic is very simple.
+Given an equation, take an initial guess and and find the functional value for that guess, in the subsequent iteration the result obtained in last iteration will be new guess. Continue this process until get the required accuracy. This means that absoulte differebce between two subsequent functional values in two iterations is too small to be neglected.</p>
+<p>But all functions don&#8217;t converge. If for given function</p>
+<div class="math">
+\[\begin{split}|f'(x)| &lt; 1\end{split}\]</div>
+<p>Then this method will converge to actual solution or in other cases, it will diverge.</p>
+<div class="section" id="implementation-in-c">
+<h2>Implementation in C<a class="headerlink" href="#implementation-in-c" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include&lt;stdio.h&gt;</span>
+<span class="cp">#include&lt;stdlib.h&gt;</span>
+<span class="cp">#include&lt;math.h&gt;</span>
+
+<span class="cp">#define g(x) sqrt(x+6)</span>
+<span class="cp">#define gd(a0) (0.5/sqrt(a0+6))</span>
+<span class="cp">#define f(x) (x*x-x-6)</span>
+<span class="cp">#define MAX_COUNT 5000</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="kt">int</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">x1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">iffound</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Please enter the initial value: &quot;</span><span class="p">);</span>
+<span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x0</span><span class="p">);</span>
+<span class="k">do</span><span class="p">{</span>
+        <span class="n">x1</span><span class="o">=</span><span class="n">g</span><span class="p">(</span><span class="n">x0</span><span class="p">);</span>
+        <span class="n">error</span><span class="o">=</span><span class="n">fabs</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">gd</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">){</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">The equation is not convergent&quot;</span><span class="p">);</span>
+                        <span class="n">iffound</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">   i    xi      f(xi)          error&quot;</span><span class="p">);</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">-------------------------------------------&quot;</span><span class="p">);</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s"> %3d  %3.5f    %3.5f  %3.5f&quot;</span><span class="p">,</span><span class="n">count</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span><span class="n">count</span><span class="o">==</span><span class="mi">0</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="n">error</span><span class="p">);</span>
+        <span class="n">x0</span><span class="o">=</span><span class="n">x1</span><span class="p">;</span>
+        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span><span class="k">while</span><span class="p">(</span><span class="n">error</span><span class="o">&gt;</span><span class="mf">0.0005</span> <span class="o">&amp;&amp;</span> <span class="n">count</span><span class="o">&lt;</span><span class="n">MAX_COUNT</span><span class="p">);</span>
+
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">iffound</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">The required root is: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x0</span><span class="p">);</span>
+<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Please enter the initial value: 2
+
+  i      xi      f(xi)          error
+-------------------------------------------
+  0    2.00000  -4.00000       -1.00000
+  1    4.00000  6.00000        1.50000
+  2    2.50000  -2.25000       0.90000
+  3    3.40000  2.16000        0.63529
+  4    2.76471  -1.12111       0.40551
+  5    3.17021  0.88004        0.27760
+  6    2.89262  -0.52538       0.18163
+  7    3.07425  0.37674        0.12255
+  8    2.95170  -0.23918       0.08103
+  9    3.03273  0.16471        0.05431
+ 10    2.97842  -0.10745       0.03608
+ 11    3.01449  0.07268        0.02411
+ 12    2.99038  -0.04799       0.01605
+ 13    3.00643  0.03220        0.01071
+ 14    2.99572  -0.02137       0.00713
+ 15    3.00286  0.01429        0.00476
+ 16    2.99810  -0.00951       0.00317
+ 17    3.00127  0.00635        0.00211
+ 18    2.99915  -0.00423       0.00141
+ 19    3.00056  0.00282        0.00094
+ 20    2.99962  -0.00188       0.00063
+ 21    3.00025  0.00125        0.00042
+The required root is: 2.999833
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bisection.html" class="btn btn-neutral float-right" title="Bisection Method" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to Numerical Methods in C’s Tutorials !" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vineet Kumar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+==============
+Secant Method
+==============
+Newton Raphson is good general purpose root finding method, but sometimes if function is very complicated then computing derivates will take much computational time, so to overcome this issue, in secant method we approximate the first order derivative term f'(r). Algorithm is more or less similar to secant method
+
+::
+
+ Given an equation f(x) = 0  
+ Let the initial guesses be x0 and x1  
+    Do  
+       xi+1= xi - 	( f(xi) * (xi - xi-1) ) / ( f(xi) - f(xi-1) )	
+ 	while (none of the convergence criterion C1 or C2 is met)
+
+
+Convergence criterias are:-
+
+* C1. Fixing apriori the total number of iterations N. 
+
+* C2. By testing the condition :math:`| x_{i+1} - xi |` (where i is the iteration number) less than some tolerance limit, say epsilon, fixed threshold. 
+
+
+C Implementation
+----------------
+.. code-block:: c++
+
+   	#include<stdio.h>
+   	#include<math.h>
+   	#define f(x) (pow(x,3)-18)
+   	int main(){
+	float x0,x1,x2,error;
+	int i=0;
+	printf("Input Two Approximations: ");
+	scanf("%f %f",&x0,&x1);
+	printf("Ite\tX0\t\tX1\t\tf(X0)\t\tf(X1)\t\tError\n");
+	do{
+		x2=((x0*f(x1))-((x1)*f(x0)))/((f(x1)-f(x0)));
+		printf("%2d\t%4.6f\t%4.6f\t%4.6f\t%4.6f\t%4.6f\n",i++,x0,x1,f(x0),f(x1),error);
+		error=fabs((x2)-(x1));
+		x0=x1;
+		x1=x2;
+	}while(error>0.00005);
+	return 0;
+	}
+
+Output
+-------
+::
+
+ Input Two Approximations: 1 2
+ Ite	X0		X1		      f(X0)		f(X1)		Error
+ 0	1.000000	2.000000	-17.000000	-10.000000	0.000000
+ 1	2.000000	3.428571	-10.000000	22.303208	1.428571
+ 2	3.428571	2.442238	22.303208	-3.433201	0.986333
+ 3	2.442238	2.573814	-3.433201	-0.949728	0.131575
+ 4	2.573814	2.624131	-0.949728	0.069927	0.050317
+ 5	2.624131	2.620680	0.069927	-0.001263	0.003451
+ 6	2.620680	2.620741	-0.001263	-0.000001	0.000061
+
+
+
+With this discussion, this series on solution of non linear equations with Iterative Methods concludes.

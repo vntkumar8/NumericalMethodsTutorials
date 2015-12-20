@@ -1,0 +1,93 @@
+====================================================
+Fixed Point Iteration / Repeated Substitution Method
+====================================================
+
+This is most easiest of all method. The logic is very simple.
+Given an equation, take an initial guess and and find the functional value for that guess, in the subsequent iteration the result obtained in last iteration will be new guess. Continue this process until get the required accuracy. This means that absoulte differebce between two subsequent functional values in two iterations is too small to be neglected.
+
+But all functions don't converge. If for given function 
+
+.. math:: |f'(x)| < 1
+Then this method will converge to actual solution or in other cases, it will diverge.
+
+
+Implementation in C
+---------------------
+
+.. code-block:: c++
+
+	#include<stdio.h>
+	#include<stdlib.h>
+	#include<math.h>
+
+	#define g(x) sqrt(x+6)
+	#define gd(a0) (0.5/sqrt(a0+6))
+	#define f(x) (x*x-x-6)
+	#define MAX_COUNT 5000
+	int main()
+	{
+	int count=0;
+	float x0=0,x1=0,error=0;
+	char iffound=0;
+	printf("Please enter the initial value: ");
+	scanf("%f",&x0);
+	do{
+		x1=g(x0);
+		error=fabs(x1-x0);
+		if(count==0)
+		{
+			if(gd(x0)>1){
+				printf("\nThe equation is not convergent");
+				iffound=1;
+				break;
+			}
+			else{
+				printf("\n   i	  xi	  f(xi)	         error");
+				printf("\n-------------------------------------------");
+			}
+		}
+		printf("\n %3d	%3.5f	 %3.5f	%3.5f",count,x0,f(x0),count==0?0:error);
+		x0=x1;
+		count++;
+	}while(error>0.0005 && count<MAX_COUNT);
+	
+	if(!iffound)
+		printf("\nThe required root is: %f\n",x0);
+	return 0;
+	}
+		
+		
+Output
+-------
+::
+
+ Please enter the initial value: 2
+
+   i	  xi	  f(xi)	         error
+ -------------------------------------------
+   0	2.00000	 -4.00000	-1.00000
+   1	4.00000	 6.00000	1.50000
+   2	2.50000	 -2.25000	0.90000
+   3	3.40000	 2.16000	0.63529
+   4	2.76471	 -1.12111	0.40551
+   5	3.17021	 0.88004	0.27760
+   6	2.89262	 -0.52538	0.18163
+   7	3.07425	 0.37674	0.12255
+   8	2.95170	 -0.23918	0.08103
+   9	3.03273	 0.16471	0.05431
+  10	2.97842	 -0.10745	0.03608
+  11	3.01449	 0.07268	0.02411
+  12	2.99038	 -0.04799	0.01605
+  13	3.00643	 0.03220	0.01071
+  14	2.99572	 -0.02137	0.00713
+  15	3.00286	 0.01429	0.00476
+  16	2.99810	 -0.00951	0.00317
+  17	3.00127	 0.00635	0.00211
+  18	2.99915	 -0.00423	0.00141
+  19	3.00056	 0.00282	0.00094
+  20	2.99962	 -0.00188	0.00063
+  21	3.00025	 0.00125	0.00042
+ The required root is: 2.999833
+
+
+

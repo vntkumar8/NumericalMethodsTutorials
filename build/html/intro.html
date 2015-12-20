@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to Solution of Non Linear Simultaneous Equations! &mdash; Numerical Methods in C 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Numerical Methods in C 1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Numerical Methods in C
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="fixed.html">Fixed Point Iteration / Repeated Substitution Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bisection.html">Bisection Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regula.html">Regula Falsi Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nr.html">Newton Raphson Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secant.html">Secant Method</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Numerical Methods in C</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Welcome to Solution of Non Linear Simultaneous Equations!</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/intro.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-solution-of-non-linear-simultaneous-equations">
+<h1>Welcome to Solution of Non Linear Simultaneous Equations!<a class="headerlink" href="#welcome-to-solution-of-non-linear-simultaneous-equations" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>In this unit we shall discuss 5 methods for solutions of non linear simulataneous equation namely-</dt>
+<dd><ul class="first last simple">
+<li>Fixed Point Iteration</li>
+<li>Bisection Method</li>
+<li>Regula Falsi Method</li>
+<li>Newton Raphson Method</li>
+<li>Secant Method</li>
+</ul>
+</dd>
+</dl>
+<p>First thing first, well all the codes illustrated in this tutorial are tested and compiled on a linux machine. To compile a C code, fire up a terminal by CTRL+ALT+T and type</p>
+<div class="highlight-python"><div class="highlight"><pre>gcc -o test test.c
+</pre></div>
+</div>
+<p>where test.c is the name of program we want to compile. To execute a program</p>
+<div class="highlight-python"><div class="highlight"><pre>./test
+</pre></div>
+</div>
+<p>Disclaimer: Well Please refer to a standard Text Book for detailed coverage of Theory, In this tutorial only minimal theoretical information will be put up which is essential for understanding the working of the method.</p>
+<p>So, lets dive in...</p>
+<p>Non-linear Equations is a set of equations in which unknowns appear as variables of a polynomial of degree higher than one. Examples are</p>
+<div class="math">
+\[\begin{split}x^2 = 25 \\y^2-y=6\\x^2-sinx=1\end{split}\]</div>
+<p>These powers and vaiables may get complicated in that case, In that case manual hand computation will be too troublesome, so we can use numerical techniques to do the computations on computers and get results.</p>
+<p>A computer code trying to solve a particular problem should have these characterstics properly specified</p>
+<div class="highlight-python"><div class="highlight"><pre>(1) Algorithm or Method Formula
+        There are two type of Methods
++-------------------------------+
+|                               |
+Iterative Methods               Direct Methods
+
+
+
+(2) Stopping Condition: In case of Iterative methods we get closer
+to actual solution in each iteration,
+so we may need to define a sufficient and necessary
+condition which will stop further iterations and prints the
+results in desired accuracy.
+</pre></div>
+</div>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&#39;en&#39;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Hello world!<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span>
+        <span class="na">href=</span><span class="s">&quot;{{ url_for(&#39;static&#39;,</span>
+<span class="s">              filename=&#39;hello.css&#39;)}}&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+It works!
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-c++"><div class="highlight"><pre>    <span class="cp">#include &lt;stdio.h&gt;</span>
+    <span class="cp">#include &lt;stdlib.h&gt;</span>
+    <span class="n">main</span><span class="p">(){</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span><span class="o">*</span><span class="n">fpwrite</span><span class="p">;</span>
+    <span class="n">fp</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;input.txt&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">);</span>
+    <span class="n">fpwrite</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;output.txt&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">numberArray</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span><span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="n">fscanf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numberArray</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fpwrite</span><span class="p">,</span> <span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">numberArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">numberArray</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vineet Kumar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

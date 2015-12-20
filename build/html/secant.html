@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Secant Method &mdash; Numerical Methods in C 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Numerical Methods in C 1 documentation" href="index.html"/>
+        <link rel="prev" title="Newton Raphson Method" href="nr.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Numerical Methods in C
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fixed.html">Fixed Point Iteration / Repeated Substitution Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bisection.html">Bisection Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regula.html">Regula Falsi Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nr.html">Newton Raphson Method</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Secant Method</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#c-implementation">C Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Numerical Methods in C</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Secant Method</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/secant.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="secant-method">
+<h1>Secant Method<a class="headerlink" href="#secant-method" title="Permalink to this headline">¶</a></h1>
+<p>Newton Raphson is good general purpose root finding method, but sometimes if function is very complicated then computing derivates will take much computational time, so to overcome this issue, in secant method we approximate the first order derivative term f&#8217;(r). Algorithm is more or less similar to secant method</p>
+<div class="highlight-python"><div class="highlight"><pre>Given an equation f(x) = 0
+Let the initial guesses be x0 and x1
+   Do
+      xi+1= xi -       ( f(xi) * (xi - xi-1) ) / ( f(xi) - f(xi-1) )
+       while (none of the convergence criterion C1 or C2 is met)
+</pre></div>
+</div>
+<p>Convergence criterias are:-</p>
+<ul class="simple">
+<li>C1. Fixing apriori the total number of iterations N.</li>
+<li>C2. By testing the condition <span class="math">\(| x_{i+1} - x_i |\)</span> (where i is the iteration number) less than some tolerance limit, say epsilon, fixed threshold.</li>
+</ul>
+<div class="section" id="c-implementation">
+<h2>C Implementation<a class="headerlink" href="#c-implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include&lt;stdio.h&gt;</span>
+<span class="cp">#include&lt;math.h&gt;</span>
+<span class="cp">#define f(x) (pow(x,3)-18)</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="kt">float</span> <span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">error</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Input Two Approximations: &quot;</span><span class="p">);</span>
+<span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f %f&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x1</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Ite</span><span class="se">\t</span><span class="s">X0</span><span class="se">\t\t</span><span class="s">X1</span><span class="se">\t\t</span><span class="s">f(X0)</span><span class="se">\t\t</span><span class="s">f(X1)</span><span class="se">\t\t</span><span class="s">Error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="k">do</span><span class="p">{</span>
+        <span class="n">x2</span><span class="o">=</span><span class="p">((</span><span class="n">x0</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">))</span><span class="o">-</span><span class="p">((</span><span class="n">x1</span><span class="p">)</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">)))</span><span class="o">/</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">-</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">)));</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%2d</span><span class="se">\t</span><span class="s">%4.6f</span><span class="se">\t</span><span class="s">%4.6f</span><span class="se">\t</span><span class="s">%4.6f</span><span class="se">\t</span><span class="s">%4.6f</span><span class="se">\t</span><span class="s">%4.6f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">i</span><span class="o">++</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span><span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">),</span><span class="n">error</span><span class="p">);</span>
+        <span class="n">error</span><span class="o">=</span><span class="n">fabs</span><span class="p">((</span><span class="n">x2</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">x1</span><span class="p">));</span>
+        <span class="n">x0</span><span class="o">=</span><span class="n">x1</span><span class="p">;</span>
+        <span class="n">x1</span><span class="o">=</span><span class="n">x2</span><span class="p">;</span>
+<span class="p">}</span><span class="k">while</span><span class="p">(</span><span class="n">error</span><span class="o">&gt;</span><span class="mf">0.00005</span><span class="p">);</span>
+<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Input Two Approximations: 1 2
+Ite    X0              X1                    f(X0)             f(X1)           Error
+0      1.000000        2.000000        -17.000000      -10.000000      0.000000
+1      2.000000        3.428571        -10.000000      22.303208       1.428571
+2      3.428571        2.442238        22.303208       -3.433201       0.986333
+3      2.442238        2.573814        -3.433201       -0.949728       0.131575
+4      2.573814        2.624131        -0.949728       0.069927        0.050317
+5      2.624131        2.620680        0.069927        -0.001263       0.003451
+6      2.620680        2.620741        -0.001263       -0.000001       0.000061
+</pre></div>
+</div>
+<p>With this discussion, this series on solution of non linear equations with Iterative Methods concludes.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="nr.html" class="btn btn-neutral" title="Newton Raphson Method" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vineet Kumar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
